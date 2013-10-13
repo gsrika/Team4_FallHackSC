@@ -81,8 +81,8 @@ gid="333875460000333"#uscclassof2013
 gid="334056999982179"#classof2016
 gid="333039016750644"#Housing
 gid="2211303362"#uscacm
-token="CAACEdEose0cBALZAhZAZAO98OySaSZAw8HPNgOqXPxw6S09TnggCH9vd5GShG27j0Q5l2qUAepWc1Aqkk0kiwOiynqvaho0fwYWKYoExbiGZAY4c7hLJM9vVCdjDybsC7XcvHp5jCqxyuqqDOH9wrfsLymPEij5s9pxsaMTXntHDh0qufuoji7EVQ2MHhIvzGHaa9se4YTgZDZD"
 next="acces_token"
+token=""
 
 level=1
 while level!=0:
