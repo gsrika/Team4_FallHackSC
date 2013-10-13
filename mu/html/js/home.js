@@ -42,19 +42,33 @@ gi.suggest = {
 	},
 	cityRender: function(cityJson){		
 		cityJson = eval(cityJson);
+                groupJson = cityJson[0];
+                cityJson = cityJson[1];
 		var cityLen = cityJson.length;
+		var grpLen = groupJson.length;
 		if(cityLen==0){ this.hideCity(); this.hidePlaces(); return false; }				
-		var cityCode = ''
+		var cityCode = '';
+		var grpCode = '';
 		this.getElm.className = 'db';
 		$g('places').className = 'center';
+		$g('groups').className = 'center';
+		$g('search_count').className = 'center';
 		for(var i=0;i<cityLen;i++){
 			cityCode += '<a id="row'+i+'" class="data" href="http://www.facebook.com/'+cityJson[i].pid+'" target="_blank">'+cityJson[i].msg+'</a>';				
 			cityCode += '<span class="ctime">'+cityJson[i].ctime+'</span>';
-			cityCode += '<span class="ctime">&nbsp;&nbsp;'+cityJson[i].group+'</span>';
+			cityCode += '<span class="ctime">&nbsp;&nbsp;&nbsp;&nbsp;'+cityJson[i].group+'</span>';
                         cityCode += '<a class="author" id="row'+i+'" href="http://www.facebook.com/'+cityJson[i].nameid+'" target="_blank"> - Trojan '+cityJson[i].name+'</a><br/><br/>';				
 		}
 		//$g('gi_suggest').innerHTML = cityCode;
 		$g('places').innerHTML = cityCode;
+		$g('search_count').innerHTML = '<span class="sc">About '+cityLen+' search results</span>';
+
+                for(var i=0;i<grpLen;i++){
+                        grpCode += '<span class="gp_name">'+groupJson[i][0]+'</span>';
+                        grpCode += '<span class="gp_value">&nbsp;&nbsp;('+groupJson[i][1]+')</span><br/>';
+                }
+		$g('groups').innerHTML = grpCode;
+
                 /*
 		for(var i=0;i<cityLen;i++){
 			var code = cityJson[i].osmid;
@@ -85,6 +99,8 @@ gi.suggest = {
 	},
  	hidePlaces: function(){		
 		$g('places').className = 'dn';
+		$g('groups').className = 'dn';
+		$g('search_count').className = 'dn';
 	},
  	egg: function(){		
 		$g('hname').className = 'headname_egg';

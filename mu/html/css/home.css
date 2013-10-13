@@ -100,5 +100,5 @@ padding:0 5px 0;}
 
 .data { display: block;  color: #660000; }
 #places { margin-top: 38px; }
-.author { float: right; color: black; }
-.ctime { color: #888; }
+.author { float: right; color: black; font-size: 14px; }
+.ctime { color: #888; font-size: 15px; }

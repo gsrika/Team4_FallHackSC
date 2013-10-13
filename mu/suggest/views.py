@@ -1,5 +1,7 @@
 import pdb
 import simplejson
+from operator import itemgetter
+from datetime import datetime
 from django.http import HttpResponse
 from django.core.cache import get_cache
 from django.template import RequestContext
@@ -22,8 +24,10 @@ def autosuggest(request):
         if (request.GET.has_key('search')):
             searchWord = request.GET['search'].lower()
             airList = []
-            airList = searchincludespace(searchWord)
-            return HttpResponse(simplejson.dumps(airList))
+            airList, group_dict = searchincludespace(searchWord)
+            group_dict= sorted(group_dict.items(), key=itemgetter(1), reverse=True)
+            result = [ group_dict[:4], airList ]
+            return HttpResponse(simplejson.dumps(result))
         else:
             return HttpResponse('{"result":"failed","desc":"No Matches Found"}')
     except Exception,e:
@@ -54,8 +58,9 @@ def answer(hashes_list):
     to the hashes dreived
     """
     suggList = []
+    group_dict = {}
     r = get_cache('autosuggest')
-    for hashes in hashes_list:
+    for hashes in reversed(hashes_list):
         di = {}
         result = r._client.hget("task", hashes)
         rlist = result.split(':')
@@ -63,7 +68,14 @@ def answer(hashes_list):
         di['nameid'] = r._client.hget(hashes, 'nameid')
         di['name'] = r._client.hget(hashes, 'name')
         di['pid'] = hashes
-        di['ctime'] = r._client.hget(hashes, 'ctime')
-        di['group'] = r._client.hget(hashes, 'group')
+        ctime = r._client.hget(hashes, 'ctime')
+        ctime = datetime.strptime(ctime.split(' ')[0], '%Y-%m-%d')
+        di['ctime'] = str(ctime.day) + ' ' + ctime.strftime("%B") + ' ' + str(ctime.year)
+        gp = r._client.hget(hashes, 'group')
+        di['group'] = gp
+        if group_dict.has_key(gp): 
+            group_dict[gp]+=1
+        else:
+            group_dict[gp] = 1;
         suggList.append(di)
-    return suggList
+    return suggList, group_dict
